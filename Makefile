@@ -1,3 +1,5 @@
+all: build
+
 .PHONY: vet
 vet:
 	go vet ./...
