@@ -23,6 +23,17 @@ func main() {
 		editor = "vim"
 	}
 
+	var isViewOnly bool
+	if len(os.Args) > 1 {
+		switch os.Args[1] {
+		case "view":
+			isViewOnly = true
+		default:
+			fmt.Fprintf(os.Stderr, "unknown command %s\n", os.Args[1])
+			os.Exit(1)
+		}
+	}
+
 	time := time.Now()
 
 	dirPath := filepath.Join(homeDir, strconv.Itoa(time.Year()), fmt.Sprintf("%02d", time.Month()))
@@ -54,10 +65,12 @@ func main() {
 		}
 	}
 
-	if _, err := file.Write([]byte(fmt.Sprintf("\n## %02d:%02d\n\n", time.Hour(), time.Minute()))); err != nil {
-		fmt.Fprintf(os.Stderr, "failed to write subheader to file %q: %s\n", filePath, err.Error())
-		file.Close()
-		os.Exit(1)
+	if !isViewOnly {
+		if _, err := file.Write([]byte(fmt.Sprintf("\n## %02d:%02d\n\n", time.Hour(), time.Minute()))); err != nil {
+			fmt.Fprintf(os.Stderr, "failed to write subheader to file %q: %s\n", filePath, err.Error())
+			file.Close()
+			os.Exit(1)
+		}
 	}
 
 	file.Close()
