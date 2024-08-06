@@ -24,14 +24,28 @@ func main() {
 	}
 
 	var isViewOnly bool
+	var isTodo bool
 	if len(os.Args) > 1 {
 		switch os.Args[1] {
 		case "view":
 			isViewOnly = true
+		case "todo":
+			isTodo = true
 		default:
 			fmt.Fprintf(os.Stderr, "unknown command %s\n", os.Args[1])
 			os.Exit(1)
 		}
+	}
+
+	if isTodo {
+		cmd := exec.Command(editor, filepath.Join(homeDir, "TODO.md"))
+		cmd.Stdin = os.Stdin
+		cmd.Stdout = os.Stdout
+		if err := cmd.Run(); err != nil {
+			fmt.Fprintf(os.Stderr, "failed to run command: %v\n", err)
+			os.Exit(1)
+		}
+		os.Exit(0)
 	}
 
 	time := time.Now()
