@@ -32,28 +32,37 @@ This file is meant to be used as an easy way of keeping track of things that nee
 
 ## 🏗️ Setup
 
+**Home directory**
+
 The home directory for the logs needs to be specified.
 This can be done by either using the `--home` flag (has precedence), or setting the `LOGBOOK_HOME` environment variable.
+
+**Editor**
+
+Which editor to use to edit the files can be specified using either the `--editor` flag (has precedence)
+or setting the `EDITOR` environment variable.
+
+If neither of these are set, it default to `vim`.
 
 ### Environment Variables
 
 **Optional**
 
 - `LOGBOOK_HOME`: the path to the directory where files should be created
-- `EDITOR`: is the editor of choice to open the files with. Defaults to `vim` if not set
+- `EDITOR`: is the editor of choice to open the files with
 
 ## 🐶 Usage
 
-`log`: create a new file `$LOGBOOK_HOME/YYYY/MM/DD.md`, with header `## HH:MM`, and open with `$EDITOR` (or `vim`)
+`log`: create and open a new file `$LOGBOOK_HOME/YYYY/MM/DD.md` with header `## HH:MM`
 
 `log view`: opens the most current file (TODO: check further back than the first of each month and year)
 
-`log todo`: open the file `$LOGBOOK_HOME/TODO.md` with `$EDITOR` (or `vim`)
+`log todo`: open the file `$LOGBOOK_HOME/TODO.md`
 
 ---
 
 To make logging outside of a terminal easier, it's recommended to create a keyboard shortcut
-to open up a new terminal and run `log` (it might be necessary to specify the home directory using the flag,
+to open up a new terminal and run `log` (it might be necessary to specify the home directory and editor using the flags,
 as envvars might not be loaded).
 The setup will vary depending on OS, desktop environment and shell used, so figuring out how to do this is an exercise
 left for the reader.

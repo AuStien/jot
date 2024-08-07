@@ -13,6 +13,7 @@ import (
 )
 
 var homeDirFlag = flag.String("home", "", "Set home directory. Takes precedence over envvar")
+var editorFlag = flag.String("editor", "", "Set editor. Takes precedence over envvar")
 
 func main() {
 	flag.Parse()
@@ -33,9 +34,18 @@ func main() {
 		os.Exit(1)
 	}
 
-	editor, ok := os.LookupEnv("EDITOR")
-	if !ok {
-		editor = "vim"
+	editor := ""
+	if editorFlag != nil && *editorFlag != "" {
+		editor = *editorFlag
+	}
+
+	if editor == "" {
+		editorEnv, ok := os.LookupEnv("EDITOR")
+		if ok {
+			editor = editorEnv
+		} else {
+			editor = "vim"
+		}
 	}
 
 	var isViewOnly bool
