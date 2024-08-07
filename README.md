@@ -32,14 +32,14 @@ This file is meant to be used as an easy way of keeping track of things that nee
 
 ## 🏗️ Setup
 
+The home directory for the logs needs to be specified.
+This can be done by either using the `--home` flag (has precedence), or setting the `LOGBOOK_HOME` environment variable.
+
 ### Environment Variables
-
-**Required**
-
-- `LOGBOOK_HOME`: the path to the directory where files should be created
 
 **Optional**
 
+- `LOGBOOK_HOME`: the path to the directory where files should be created
 - `EDITOR`: is the editor of choice to open the files with. Defaults to `vim` if not set
 
 ## 🐶 Usage

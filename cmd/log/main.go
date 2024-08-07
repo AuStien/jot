@@ -2,6 +2,7 @@ package main
 
 import (
 	"errors"
+	"flag"
 	"fmt"
 	"io/fs"
 	"os"
@@ -11,10 +12,24 @@ import (
 	"time"
 )
 
+var homeDirFlag = flag.String("home", "", "Set home directory. Takes precedence over envvar")
+
 func main() {
-	homeDir, ok := os.LookupEnv("LOGBOOK_HOME")
-	if !ok {
-		fmt.Fprintf(os.Stderr, "missing envvar LOGBOOK_HOME\n")
+	flag.Parse()
+
+	homeDir := ""
+	if homeDirFlag != nil && *homeDirFlag != "" {
+		homeDir = *homeDirFlag
+	}
+
+	if homeDir == "" {
+		homeDirEnv, ok := os.LookupEnv("LOGBOOK_HOME")
+		if ok {
+			homeDir = homeDirEnv
+		}
+	}
+	if homeDir == "" {
+		fmt.Fprintf(os.Stderr, "missing home dir. Set with LOGBOOK_HOME or --home\n")
 		os.Exit(1)
 	}
 
@@ -25,8 +40,8 @@ func main() {
 
 	var isViewOnly bool
 	var isTodo bool
-	if len(os.Args) > 1 {
-		switch os.Args[1] {
+	if len(flag.Args()) > 1 {
+		switch flag.Args()[1] {
 		case "view":
 			isViewOnly = true
 		case "todo":
