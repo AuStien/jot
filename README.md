@@ -46,7 +46,7 @@ This file is meant to be used as an easy way of keeping track of things that nee
 
 `log`: create a new file `$LOGBOOK_HOME/YYYY/MM/DD.md`, with header `## HH:MM`, and open with `$EDITOR` (or `vim`)
 
-`log view`: does the same as `log`, but doesn't create a new header
+`log view`: opens the most current file (TODO: check further back than the first of each month and year)
 
 `log todo`: open the file `$LOGBOOK_HOME/TODO.md` with `$EDITOR` (or `vim`)
 

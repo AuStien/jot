@@ -50,7 +50,98 @@ func main() {
 
 	now := time.Now()
 
-	dirPath := filepath.Join(homeDir, strconv.Itoa(time.Year()), fmt.Sprintf("%02d", time.Month()))
+	if isViewOnly {
+		entries, err := os.ReadDir(homeDir)
+		if err != nil {
+			fmt.Fprintf(os.Stderr, "readdir %q: %v\n", homeDir, err)
+			os.Exit(1)
+		}
+
+		yearDir := ""
+		// Only check the last 100 years
+		for i := now.Year(); i >= now.Year()-100; i-- {
+			year := fmt.Sprintf("%d", i)
+			for _, entry := range entries {
+				if entry.Name() == year {
+					if !entry.IsDir() {
+						fmt.Fprintf(os.Stderr, "\"%s/%s\" not a dir\n", homeDir, entry)
+						os.Exit(1)
+					}
+
+					yearDir = filepath.Join(homeDir, entry.Name())
+					goto month
+				}
+			}
+		}
+
+	month:
+		if yearDir == "" {
+			fmt.Fprintf(os.Stderr, "directory for year %d not found\n", now.Year())
+			os.Exit(1)
+		}
+
+		entries, err = os.ReadDir(yearDir)
+		if err != nil {
+			fmt.Fprintf(os.Stderr, "readdir %q: %v\n", yearDir, err)
+			os.Exit(1)
+		}
+
+		monthDir := ""
+		for i := now.Month(); i > 0; i-- {
+			month := fmt.Sprintf("%02d", i)
+			for _, entry := range entries {
+				if entry.Name() == month {
+					if !entry.IsDir() {
+						fmt.Fprintf(os.Stderr, "\"%s/%s\" not a dir\n", yearDir, entry)
+						os.Exit(1)
+					}
+
+					monthDir = filepath.Join(yearDir, entry.Name())
+					goto day
+				}
+			}
+		}
+
+	day:
+		if monthDir == "" {
+			fmt.Fprintf(os.Stderr, "directory for month %02d not found\n", now.Month())
+			os.Exit(1)
+		}
+
+		entries, err = os.ReadDir(monthDir)
+		if err != nil {
+			fmt.Fprintf(os.Stderr, "readdir %q: %v\n", monthDir, err)
+			os.Exit(1)
+		}
+
+		dayFile := ""
+		for i := now.Day(); i > 0; i-- {
+			day := fmt.Sprintf("%02d.md", i)
+			for _, entry := range entries {
+				if entry.Name() == day {
+					dayFile = filepath.Join(monthDir, entry.Name())
+					goto open
+				}
+			}
+		}
+
+	open:
+		if dayFile == "" {
+			fmt.Fprintf(os.Stderr, "file for day %02d not found\n", now.Day())
+			os.Exit(1)
+		}
+		cmd := exec.Command(editor, "+", dayFile)
+		cmd.Stdin = os.Stdin
+		cmd.Stdout = os.Stdout
+		if err := cmd.Run(); err != nil {
+			fmt.Fprintf(os.Stderr, "failed to run command: %v\n", err)
+			os.Exit(1)
+		}
+
+		os.Exit(0)
+	}
+
+	dirPath := filepath.Join(homeDir, strconv.Itoa(now.Year()), fmt.Sprintf("%02d", now.Month()))
 
 	if err := os.MkdirAll(dirPath, 0755); err != nil {
 		fmt.Fprintf(os.Stderr, "failed to create directory %q: %s\n", dirPath, err.Error())
@@ -79,12 +170,10 @@ func main() {
 		}
 	}
 
-	if !isViewOnly {
-		if _, err := file.Write([]byte(fmt.Sprintf("\n## %02d:%02d\n\n", now.Hour(), now.Minute()))); err != nil {
-			fmt.Fprintf(os.Stderr, "failed to write subheader to file %q: %s\n", filePath, err.Error())
-			file.Close()
-			os.Exit(1)
-		}
+	if _, err := file.Write([]byte(fmt.Sprintf("\n## %02d:%02d\n\n", now.Hour(), now.Minute()))); err != nil {
+		fmt.Fprintf(os.Stderr, "failed to write subheader to file %q: %s\n", filePath, err.Error())
+		file.Close()
+		os.Exit(1)
 	}
 
 	file.Close()
