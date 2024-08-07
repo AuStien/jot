@@ -50,6 +50,14 @@ This can be done by either using the `--home` flag (has precedence), or setting 
 
 `log todo`: open the file `$LOGBOOK_HOME/TODO.md` with `$EDITOR` (or `vim`)
 
+---
+
+To make logging outside of a terminal easier, it's recommended to create a keyboard shortcut
+to open up a new terminal and run `log` (it might be necessary to specify the home directory using the flag,
+as envvars might not be loaded).
+The setup will vary depending on OS, desktop environment and shell used, so figuring out how to do this is an exercise
+left for the reader.
+
 ## 📝 Development
 
 > It's recommended setting the `LOGBOOK_HOME` envvar to a different path than you usually use to avoid messing up "production" notes.
