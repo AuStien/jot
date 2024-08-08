@@ -50,14 +50,14 @@ func main() {
 
 	var isViewOnly bool
 	var isTodo bool
-	if len(flag.Args()) > 1 {
-		switch flag.Args()[1] {
+	if len(flag.Args()) > 0 {
+		switch flag.Args()[0] {
 		case "view":
 			isViewOnly = true
 		case "todo":
 			isTodo = true
 		default:
-			fmt.Fprintf(os.Stderr, "unknown command %s\n", os.Args[1])
+			fmt.Fprintf(os.Stderr, "unknown command %s\n", os.Args[0])
 			os.Exit(1)
 		}
 	}
