@@ -42,7 +42,7 @@ This can be done by either using the `--home` flag (has precedence), or setting 
 Which editor to use to edit the files can be specified using either the `--editor` flag (has precedence)
 or setting the `EDITOR` environment variable.
 
-If neither of these are set, it default to `vim`.
+If neither of these are set, it defaults to `vi`.
 
 ### Environment Variables
 
@@ -81,7 +81,3 @@ Feel free to create an [issue](https://github.com/AuStien/logbook/issues) or [PR
 
 As the project is still quite small there are no requirements for issues or PRs.
 
-## 🌈 Future possibilites
-
-- Add tooling for grouping together notes
-- Add possiblity of storing files remotely using `sftp` and/or FUSE

@@ -10,6 +10,7 @@ import (
 
 // editors is a map of all supported editors.
 var editors = map[string]Editor{
+	"vi":   Vi{},
 	"vim":  Vim{},
 	"nvim": Neovim{},
 	"nano": Nano{},
