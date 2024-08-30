@@ -55,7 +55,7 @@ If neither of these are set, it defaults to `vi`.
 
 `log`: create and open a new file `$LOGBOOK_HOME/YYYY/MM/DD.md` with header `## HH:MM`
 
-`log view`: opens the most current file (TODO: check further back than the first of each month and year)
+`log view`: concats all the files in the last month in a temporary file and opens it
 
 `log todo`: open the file `$LOGBOOK_HOME/TODO.md`
 
