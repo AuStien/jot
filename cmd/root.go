@@ -26,6 +26,7 @@ func init() {
 
 	rootCmd.AddCommand(todoCmd)
 	rootCmd.AddCommand(viewCmd)
+	rootCmd.AddCommand(editCmd)
 }
 
 var rootCmd = &cobra.Command{
@@ -60,5 +61,21 @@ var rootCmd = &cobra.Command{
 }
 
 func Execute() error {
+	if len(os.Args[1:]) == 1 {
+		var cmdFound bool
+		cmds := rootCmd.Commands()
+
+		for _, cmd := range cmds {
+			if cmd.Name() == os.Args[1] {
+				cmdFound = true
+				break
+			}
+		}
+		if !cmdFound {
+			args := append([]string{"edit"}, os.Args[1])
+			rootCmd.SetArgs(args)
+		}
+	}
+
 	return rootCmd.Execute()
 }
