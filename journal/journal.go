@@ -20,7 +20,7 @@ type Journal struct {
 	Editor  editors.Editor
 }
 
-// UpsertDayFile makes sure the file "2024/08/30.md"
+// CreateEntry makes sure the file "2024/08/30.md"
 // exists.
 //
 // If it was created the following header will be added:
@@ -32,7 +32,7 @@ type Journal struct {
 //	## 14:35
 //
 // Lastly it opens the file for editing.
-func (j Journal) UpsertDayFile(at time.Time) error {
+func (j Journal) CreateEntry(at time.Time) error {
 	year := fmt.Sprintf("%d", at.Year())
 	month := fmt.Sprintf("%02d", at.Month())
 	day := fmt.Sprintf("%02d", at.Day())

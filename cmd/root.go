@@ -53,7 +53,7 @@ var rootCmd = &cobra.Command{
 	Run: func(cmd *cobra.Command, args []string) {
 		now := time.Now()
 
-		if err := j.UpsertDayFile(now); err != nil {
+		if err := j.CreateEntry(now); err != nil {
 			fmt.Fprintf(os.Stderr, "upserDayFile: %s\n", err.Error())
 			os.Exit(1)
 		}
