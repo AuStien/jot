@@ -17,7 +17,7 @@ var editCmd = &cobra.Command{
 		levels := strings.Split(args[0], "/")
 		if len(levels) > 1 {
 			path := []string{}
-			path = append(path, b.HomeDir)
+			path = append(path, b.HomeDir, "binder")
 			path = append(path, levels[:len(levels)-1]...)
 			if err := os.MkdirAll(filepath.Join(path...), 0755); err != nil {
 				fmt.Fprintf(os.Stderr, err.Error())
@@ -25,7 +25,7 @@ var editCmd = &cobra.Command{
 			}
 		}
 
-		if err := b.Editor.OpenFile(filepath.Join(b.HomeDir, fmt.Sprintf("%s.md", args[0]))); err != nil {
+		if err := b.Editor.OpenFile(filepath.Join(b.HomeDir, "binder", fmt.Sprintf("%s.md", args[0]))); err != nil {
 			fmt.Fprintf(os.Stderr, "failed editing %s.md: %s\n", args[0], err.Error())
 			os.Exit(1)
 		}
