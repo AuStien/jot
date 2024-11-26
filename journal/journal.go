@@ -13,11 +13,18 @@ import (
 	"github.com/austien/logbook/editors"
 )
 
-const DirKey = "journal"
+const dirKey = "journal"
 
-type Journal struct {
+type journal struct {
 	HomeDir string
 	Editor  editors.Editor
+}
+
+func New(rootDir string, editor editors.Editor) journal {
+	return journal{
+		HomeDir: filepath.Join(rootDir, dirKey),
+		Editor:  editor,
+	}
 }
 
 // CreateEntry makes sure the file "2024/08/30.md"
@@ -32,7 +39,7 @@ type Journal struct {
 //	## 14:35
 //
 // Lastly it opens the file for editing.
-func (j Journal) CreateEntry(at time.Time) error {
+func (j journal) CreateEntry(at time.Time) error {
 	year := fmt.Sprintf("%d", at.Year())
 	month := fmt.Sprintf("%02d", at.Month())
 	day := fmt.Sprintf("%02d", at.Day())
@@ -73,7 +80,7 @@ func (j Journal) CreateEntry(at time.Time) error {
 
 // ConcatLastMonth concats all the files of the last month (with
 // entries) in a temporary file and opens said file.
-func (j Journal) ConcatLastMonth() (string, error) {
+func (j journal) ConcatLastMonth() (string, error) {
 	now := time.Now()
 
 	entries, err := os.ReadDir(j.HomeDir)
