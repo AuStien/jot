@@ -6,13 +6,13 @@ import (
 	"path/filepath"
 	"time"
 
-	"github.com/austien/logbook/book"
 	"github.com/austien/logbook/editors"
+	"github.com/austien/logbook/journal"
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
 )
 
-var b book.Book
+var j journal.Journal
 
 func init() {
 	rootCmd.PersistentFlags().String("home", "$HOME/.logbook", "home for logs (default is $HOME/.logbook)")
@@ -45,15 +45,15 @@ var rootCmd = &cobra.Command{
 			os.Exit(1)
 		}
 
-		b = book.Book{
-			HomeDir: absoluteHomeDir,
+		j = journal.Journal{
+			HomeDir: filepath.Join(absoluteHomeDir, journal.DirKey),
 			Editor:  editor,
 		}
 	},
 	Run: func(cmd *cobra.Command, args []string) {
 		now := time.Now()
 
-		if err := b.UpsertDayFile(now); err != nil {
+		if err := j.UpsertDayFile(now); err != nil {
 			fmt.Fprintf(os.Stderr, "upserDayFile: %s\n", err.Error())
 			os.Exit(1)
 		}

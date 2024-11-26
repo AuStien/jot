@@ -1,4 +1,4 @@
-package book
+package journal
 
 import (
 	"errors"
@@ -13,7 +13,9 @@ import (
 	"github.com/austien/logbook/editors"
 )
 
-type Book struct {
+const DirKey = "journal"
+
+type Journal struct {
 	HomeDir string
 	Editor  editors.Editor
 }
@@ -30,18 +32,16 @@ type Book struct {
 //	## 14:35
 //
 // Lastly it opens the file for editing.
-func (b Book) UpsertDayFile(at time.Time) error {
+func (j Journal) UpsertDayFile(at time.Time) error {
 	year := fmt.Sprintf("%d", at.Year())
 	month := fmt.Sprintf("%02d", at.Month())
 	day := fmt.Sprintf("%02d", at.Day())
 
-	rootDir := b.getJournalRootPath()
-
-	if err := os.MkdirAll(filepath.Join(rootDir, year, month), 0755); err != nil {
+	if err := os.MkdirAll(filepath.Join(j.HomeDir, year, month), 0755); err != nil {
 		return err
 	}
 
-	filePath := filepath.Join(rootDir, year, month, fmt.Sprintf("%s.md", day))
+	filePath := filepath.Join(j.HomeDir, year, month, fmt.Sprintf("%s.md", day))
 	file, err := os.OpenFile(filePath, os.O_WRONLY|os.O_APPEND, 0755)
 	if err != nil {
 		if !errors.Is(err, fs.ErrNotExist) {
@@ -64,7 +64,7 @@ func (b Book) UpsertDayFile(at time.Time) error {
 		return fmt.Errorf("writing subheader to file %s: %w", file.Name(), err)
 	}
 
-	if err := b.Editor.OpenFileWithCursorAtEnd(filePath); err != nil {
+	if err := j.Editor.OpenFileWithCursorAtEnd(filePath); err != nil {
 		return fmt.Errorf("editing file %s: %w", filePath, err)
 	}
 
@@ -73,11 +73,10 @@ func (b Book) UpsertDayFile(at time.Time) error {
 
 // ConcatLastMonth concats all the files of the last month (with
 // entries) in a temporary file and opens said file.
-func (b Book) ConcatLastMonth() (string, error) {
+func (j Journal) ConcatLastMonth() (string, error) {
 	now := time.Now()
-	rootDir := b.getJournalRootPath()
 
-	entries, err := os.ReadDir(rootDir)
+	entries, err := os.ReadDir(j.HomeDir)
 	if err != nil {
 		return "", err
 	}
@@ -90,10 +89,10 @@ func (b Book) ConcatLastMonth() (string, error) {
 		for _, entry := range entries {
 			if entry.Name() == year {
 				if !entry.IsDir() {
-					return "", fmt.Errorf("%s/%s is not a dir", rootDir, entry)
+					return "", fmt.Errorf("%s/%s is not a dir", j.HomeDir, entry)
 				}
 
-				yearDir = filepath.Join(rootDir, entry.Name())
+				yearDir = filepath.Join(j.HomeDir, entry.Name())
 				break
 			}
 		}
@@ -165,13 +164,9 @@ func (b Book) ConcatLastMonth() (string, error) {
 		}
 	}
 
-	if err := b.Editor.OpenFileReadOnly(tmpFile.Name()); err != nil {
+	if err := j.Editor.OpenFileReadOnly(tmpFile.Name()); err != nil {
 		return "", fmt.Errorf("openFileReadOnly %s: %w", tmpFile.Name(), err)
 	}
 
 	return tmpFile.Name(), nil
-}
-
-func (b Book) getJournalRootPath() string {
-	return filepath.Join(b.HomeDir, "journal")
 }
