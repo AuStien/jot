@@ -35,11 +35,13 @@ func (b Book) UpsertDayFile(at time.Time) error {
 	month := fmt.Sprintf("%02d", at.Month())
 	day := fmt.Sprintf("%02d", at.Day())
 
-	if err := os.MkdirAll(filepath.Join(b.HomeDir, year, month), 0755); err != nil {
+	rootDir := b.getJournalRootPath()
+
+	if err := os.MkdirAll(filepath.Join(rootDir, year, month), 0755); err != nil {
 		return err
 	}
 
-	filePath := filepath.Join(b.HomeDir, year, month, fmt.Sprintf("%s.md", day))
+	filePath := filepath.Join(rootDir, year, month, fmt.Sprintf("%s.md", day))
 	file, err := os.OpenFile(filePath, os.O_WRONLY|os.O_APPEND, 0755)
 	if err != nil {
 		if !errors.Is(err, fs.ErrNotExist) {
@@ -73,7 +75,9 @@ func (b Book) UpsertDayFile(at time.Time) error {
 // entries) in a temporary file and opens said file.
 func (b Book) ConcatLastMonth() (string, error) {
 	now := time.Now()
-	entries, err := os.ReadDir(b.HomeDir)
+	rootDir := b.getJournalRootPath()
+
+	entries, err := os.ReadDir(rootDir)
 	if err != nil {
 		return "", err
 	}
@@ -86,10 +90,10 @@ func (b Book) ConcatLastMonth() (string, error) {
 		for _, entry := range entries {
 			if entry.Name() == year {
 				if !entry.IsDir() {
-					return "", fmt.Errorf("%s/%s is not a dir", b.HomeDir, entry)
+					return "", fmt.Errorf("%s/%s is not a dir", rootDir, entry)
 				}
 
-				yearDir = filepath.Join(b.HomeDir, entry.Name())
+				yearDir = filepath.Join(rootDir, entry.Name())
 				break
 			}
 		}
@@ -166,4 +170,8 @@ func (b Book) ConcatLastMonth() (string, error) {
 	}
 
 	return tmpFile.Name(), nil
+}
+
+func (b Book) getJournalRootPath() string {
+	return filepath.Join(b.HomeDir, "journal")
 }
