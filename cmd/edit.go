@@ -28,7 +28,16 @@ var editCmd = &cobra.Command{
 			}
 		}
 
-		if err := editor.OpenFile(filepath.Join(b.HomeDir, fmt.Sprintf("%s.md", args[0]))); err != nil {
+		// Make sure ".md" is added if no extension is specified.
+		// If it is specify, make sure it isn't doubled up.
+		ext := filepath.Ext(args[0])
+		if ext == "" {
+			ext = ".md"
+		} else {
+			ext = ""
+		}
+
+		if err := editor.OpenFile(filepath.Join(b.HomeDir, fmt.Sprintf("%s%s", args[0], ext))); err != nil {
 			fmt.Fprintf(os.Stderr, "failed editing %s.md: %s\n", args[0], err.Error())
 			os.Exit(1)
 		}
