@@ -17,7 +17,7 @@ var editCmd = &cobra.Command{
 	Run: func(cmd *cobra.Command, args []string) {
 		b := binder.New(rootDir, editor)
 
-		levels := strings.Split(args[0], "/")
+		levels := strings.Split(args[0], string(os.PathSeparator))
 		if len(levels) > 1 {
 			path := []string{b.HomeDir}
 			path = append(path, levels[:len(levels)-1]...)
