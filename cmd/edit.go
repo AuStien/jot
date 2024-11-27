@@ -41,4 +41,19 @@ var editCmd = &cobra.Command{
 			os.Exit(1)
 		}
 	},
+	ValidArgsFunction: func(cmd *cobra.Command, args []string, toComplete string) ([]string, cobra.ShellCompDirective) {
+		if len(args) != 0 {
+			return nil, cobra.ShellCompDirectiveNoFileComp
+		}
+
+		b := binder.New(rootDir, editor)
+
+		targets, err := b.AutoCompleteTargets(toComplete)
+		if err != nil {
+			cobra.CompErrorln(err.Error())
+			return nil, cobra.ShellCompDirectiveError
+		}
+
+		return targets, cobra.ShellCompDirectiveNoSpace
+	},
 }
