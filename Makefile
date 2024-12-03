@@ -10,7 +10,7 @@ fmt:
 
 .PHONY: build
 build: vet fmt
-	go build -o bin/log main.go
+	go build -o bin/logbook logbook.go
 
 .PHONY: run
 run: vet fmt

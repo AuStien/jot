@@ -33,7 +33,7 @@ func init() {
 }
 
 var rootCmd = &cobra.Command{
-	Use:   "log",
+	Use:   "logbook",
 	Short: "Jot jot",
 	PersistentPreRun: func(cmd *cobra.Command, args []string) {
 		var err error
