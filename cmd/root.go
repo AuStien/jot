@@ -29,7 +29,7 @@ func init() {
 
 	rootCmd.AddCommand(todoCmd)
 	rootCmd.AddCommand(viewCmd)
-	rootCmd.AddCommand(editCmd)
+	rootCmd.AddCommand(binderCmd)
 }
 
 var rootCmd = &cobra.Command{
@@ -73,7 +73,7 @@ func Execute() error {
 			}
 		}
 		if !cmdFound {
-			args := append([]string{"edit"}, os.Args[1])
+			args := append([]string{"binder"}, os.Args[1])
 			rootCmd.SetArgs(args)
 		}
 	}
