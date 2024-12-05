@@ -7,6 +7,7 @@ import (
 	"strings"
 
 	"github.com/austien/logbook/binder"
+	"github.com/austien/logbook/config"
 	"github.com/spf13/cobra"
 )
 
@@ -16,7 +17,9 @@ var binderCmd = &cobra.Command{
 	Short:   "Edit the any file in the binder, creating directories if necessary",
 	Args:    cobra.MaximumNArgs(1),
 	Run: func(cmd *cobra.Command, args []string) {
-		b := binder.New(rootDir, editor)
+		cfg := config.Get()
+
+		b := binder.New(cfg)
 
 		path := ""
 		if len(args) > 0 {
@@ -32,7 +35,7 @@ var binderCmd = &cobra.Command{
 			path = args[0]
 		}
 
-		if err := editor.OpenFile(filepath.Join(b.HomeDir, path)); err != nil {
+		if err := cfg.Editor.OpenFile(filepath.Join(b.HomeDir, path)); err != nil {
 			fmt.Fprintf(os.Stderr, "failed editing %s: %s\n", path, err.Error())
 			os.Exit(1)
 		}
@@ -42,7 +45,9 @@ var binderCmd = &cobra.Command{
 			return nil, cobra.ShellCompDirectiveNoFileComp
 		}
 
-		b := binder.New(rootDir, editor)
+		cfg := config.Get()
+
+		b := binder.New(cfg)
 
 		targets, err := b.AutoCompleteTargets(toComplete)
 		if err != nil {

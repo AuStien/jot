@@ -6,6 +6,7 @@ import (
 	"path/filepath"
 	"strings"
 
+	"github.com/austien/logbook/config"
 	"github.com/austien/logbook/editors"
 )
 
@@ -16,10 +17,10 @@ type binder struct {
 	Editor  editors.Editor
 }
 
-func New(rootDir string, editor editors.Editor) binder {
+func New(cfg config.Config) binder {
 	return binder{
-		HomeDir: filepath.Join(rootDir, dirKey),
-		Editor:  editor,
+		HomeDir: filepath.Join(cfg.RootDir, dirKey),
+		Editor:  cfg.Editor,
 	}
 }
 

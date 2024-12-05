@@ -10,6 +10,7 @@ import (
 	"strings"
 	"time"
 
+	"github.com/austien/logbook/config"
 	"github.com/austien/logbook/editors"
 )
 
@@ -20,10 +21,10 @@ type journal struct {
 	Editor  editors.Editor
 }
 
-func New(rootDir string, editor editors.Editor) journal {
+func New(cfg config.Config) journal {
 	return journal{
-		HomeDir: filepath.Join(rootDir, dirKey),
-		Editor:  editor,
+		HomeDir: filepath.Join(cfg.RootDir, dirKey),
+		Editor:  cfg.Editor,
 	}
 }
 
@@ -44,12 +45,12 @@ func (j journal) CreateEntry(at time.Time) error {
 	month := fmt.Sprintf("%02d", at.Month())
 	day := fmt.Sprintf("%02d", at.Day())
 
-	if err := os.MkdirAll(filepath.Join(j.HomeDir, year, month), 0755); err != nil {
+	if err := os.MkdirAll(filepath.Join(j.HomeDir, year, month), 0o755); err != nil {
 		return err
 	}
 
 	filePath := filepath.Join(j.HomeDir, year, month, fmt.Sprintf("%s.md", day))
-	file, err := os.OpenFile(filePath, os.O_WRONLY|os.O_APPEND, 0755)
+	file, err := os.OpenFile(filePath, os.O_WRONLY|os.O_APPEND, 0o755)
 	if err != nil {
 		if !errors.Is(err, fs.ErrNotExist) {
 			return err
