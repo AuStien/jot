@@ -5,7 +5,7 @@ import (
 	"os"
 	"os/exec"
 
-	"github.com/austien/logbook/debug"
+	"github.com/austien/jot/debug"
 )
 
 // editors is a map of all supported editors.
@@ -37,7 +37,7 @@ func GetEditor(name string) (Editor, error) {
 		}
 	}
 
-	return nil, fmt.Errorf("unsupported editor %q (feel free to create a PR adding support at https://github.com/austien/logbook)", name)
+	return nil, fmt.Errorf("unsupported editor %q (feel free to create a PR adding support at https://github.com/austien/jot)", name)
 }
 
 // executeCmd is a helper function for editors to execute commands.

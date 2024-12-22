@@ -10,8 +10,8 @@ import (
 	"strings"
 	"time"
 
-	"github.com/austien/logbook/config"
-	"github.com/austien/logbook/editors"
+	"github.com/austien/jot/config"
+	"github.com/austien/jot/editors"
 )
 
 const dirKey = "journal"
@@ -141,7 +141,7 @@ func (j journal) ConcatLastMonth() (string, error) {
 		return "", fmt.Errorf("directory for month %02d not found", now.Month())
 	}
 
-	tmpFile, err := os.CreateTemp("", fmt.Sprintf("logbook-%s-%s-*.md", year, month))
+	tmpFile, err := os.CreateTemp("", fmt.Sprintf("jot-%s-%s-*.md", year, month))
 	if err != nil {
 		return "", fmt.Errorf("createTemp: %w", err)
 	}

@@ -5,7 +5,7 @@ import (
 	"os"
 	"path/filepath"
 
-	"github.com/austien/logbook/config"
+	"github.com/austien/jot/config"
 	"github.com/spf13/cobra"
 )
 

@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"os"
 
-	"github.com/austien/logbook/cmd"
+	"github.com/austien/jot/cmd"
 )
 
 func main() {

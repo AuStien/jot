@@ -1,4 +1,4 @@
-module github.com/austien/logbook
+module github.com/austien/jot
 
 go 1.23
 

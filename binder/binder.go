@@ -6,8 +6,8 @@ import (
 	"path/filepath"
 	"strings"
 
-	"github.com/austien/logbook/config"
-	"github.com/austien/logbook/editors"
+	"github.com/austien/jot/config"
+	"github.com/austien/jot/editors"
 )
 
 const dirKey = "binder"

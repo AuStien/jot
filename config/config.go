@@ -5,7 +5,7 @@ import (
 	"os"
 	"path/filepath"
 
-	"github.com/austien/logbook/editors"
+	"github.com/austien/jot/editors"
 	"github.com/spf13/viper"
 )
 

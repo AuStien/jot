@@ -6,8 +6,8 @@ import (
 
 	"github.com/spf13/cobra"
 
-	"github.com/austien/logbook/config"
-	"github.com/austien/logbook/journal"
+	"github.com/austien/jot/config"
+	"github.com/austien/jot/journal"
 )
 
 var viewCmd = &cobra.Command{

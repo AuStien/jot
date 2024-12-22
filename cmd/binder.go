@@ -6,8 +6,8 @@ import (
 	"path/filepath"
 	"strings"
 
-	"github.com/austien/logbook/binder"
-	"github.com/austien/logbook/config"
+	"github.com/austien/jot/binder"
+	"github.com/austien/jot/config"
 	"github.com/spf13/cobra"
 )
 
