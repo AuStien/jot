@@ -8,8 +8,8 @@ import (
 )
 
 func init() {
-	RootCmd.PersistentFlags().String("home", "$HOME/.jot", "home for notes (default is $HOME/.jot)")
-	RootCmd.PersistentFlags().String("editor", "vi", "which editor to use (default is vi")
+	RootCmd.PersistentFlags().String("home", "$XDG_DATA_HOME", "home for notes (if $XDG_DATA_HOME isn't set, uses $HOME/.local/share/jot)")
+	RootCmd.PersistentFlags().String("editor", "vi", "which editor to use")
 
 	viper.SetEnvPrefix("JOT")
 	viper.BindPFlag("home", RootCmd.LocalFlags().Lookup("home"))
