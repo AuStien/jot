@@ -15,7 +15,7 @@ var todoCmd = &cobra.Command{
 	Run: func(cmd *cobra.Command, args []string) {
 		cfg := config.Get()
 
-		if err := cfg.Editor.OpenFile(filepath.Join(cfg.RootDir, "TODO.md")); err != nil {
+		if err := cfg.Editor.OpenFile(filepath.Join(cfg.HomeDir, "TODO.md")); err != nil {
 			fmt.Fprintf(os.Stderr, "failed editing TODO.md: %s\n", err.Error())
 			os.Exit(1)
 		}

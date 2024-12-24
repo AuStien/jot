@@ -10,7 +10,7 @@ import (
 )
 
 type Config struct {
-	RootDir string
+	HomeDir string
 	Editor  editors.Editor
 }
 
@@ -23,14 +23,14 @@ func Init() {
 		os.Exit(1)
 	}
 
-	rootDir, err := filepath.Abs(viper.GetString("home"))
+	home, err := filepath.Abs(viper.GetString("home"))
 	if err != nil {
 		fmt.Fprintf(os.Stderr, "failed getting absolute path for %s: %s\n", viper.GetString("home"), err.Error())
 		os.Exit(1)
 	}
 
 	config = Config{
-		RootDir: rootDir,
+		HomeDir: home,
 		Editor:  editor,
 	}
 }

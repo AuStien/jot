@@ -23,7 +23,7 @@ type journal struct {
 
 func New(cfg config.Config) journal {
 	return journal{
-		HomeDir: filepath.Join(cfg.RootDir, dirKey),
+		HomeDir: filepath.Join(cfg.HomeDir, dirKey),
 		Editor:  cfg.Editor,
 	}
 }

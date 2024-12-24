@@ -19,7 +19,7 @@ type binder struct {
 
 func New(cfg config.Config) binder {
 	return binder{
-		HomeDir: filepath.Join(cfg.RootDir, dirKey),
+		HomeDir: filepath.Join(cfg.HomeDir, dirKey),
 		Editor:  cfg.Editor,
 	}
 }
