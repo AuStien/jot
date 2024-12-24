@@ -1,6 +1,9 @@
 package cmd
 
 import (
+	"fmt"
+	"os"
+
 	"github.com/austien/jot/cmd/journal"
 	"github.com/austien/jot/config"
 	"github.com/spf13/cobra"
@@ -21,7 +24,10 @@ func init() {
 	RootCmd.AddCommand(binderCmd)
 	RootCmd.AddCommand(journal.JournalCmd)
 
-	config.Init()
+	if err := config.Init(); err != nil {
+		fmt.Fprintf(os.Stderr, "init: %s\n", err.Error())
+		os.Exit(1)
+	}
 }
 
 var RootCmd = &cobra.Command{

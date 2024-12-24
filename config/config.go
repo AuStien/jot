@@ -16,26 +16,24 @@ type Config struct {
 
 var config Config
 
-func Init() {
+func Init() error {
 	editor, err := editors.GetEditor(viper.GetString("editor"))
 	if err != nil {
-		fmt.Fprintf(os.Stderr, "failed getting editor setup for %s: %s\n", viper.GetString("editor"), err.Error())
-		os.Exit(1)
+		return fmt.Errorf("editor setup for %s: %w", viper.GetString("editor"), err)
 	}
 
 	home := os.ExpandEnv(viper.GetString("home"))
 	if home == "" {
 		userHomeDir, err := os.UserHomeDir()
 		if err != nil {
-			panic(err)
+			return fmt.Errorf("absolute path for %s: %w", viper.GetString("home"), err)
 		}
 
 		home = filepath.Join(userHomeDir, ".local", "share", "jot")
 	} else {
 		home, err = filepath.Abs(home)
 		if err != nil {
-			fmt.Fprintf(os.Stderr, "failed getting absolute path for %s: %s\n", viper.GetString("home"), err.Error())
-			os.Exit(1)
+			return fmt.Errorf("absolute path for %s: %w", viper.GetString("home"), err)
 		}
 	}
 
@@ -43,6 +41,8 @@ func Init() {
 		HomeDir: home,
 		Editor:  editor,
 	}
+
+	return nil
 }
 
 func Get() Config {
