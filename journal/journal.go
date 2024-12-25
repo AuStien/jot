@@ -167,7 +167,7 @@ func (j journal) ConcatLastMonth() (string, error) {
 			return "", err
 		}
 
-		if _, err := tmpFile.WriteString(fmt.Sprintf("\n---\n\n")); err != nil {
+		if _, err := tmpFile.WriteString("\n---\n\n"); err != nil {
 			return "", err
 		}
 	}
