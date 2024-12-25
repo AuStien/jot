@@ -3,6 +3,7 @@ package cmd
 import (
 	"fmt"
 	"os"
+	"runtime/debug"
 
 	"github.com/austien/jot/cmd/journal"
 	"github.com/austien/jot/config"
@@ -28,11 +29,31 @@ func init() {
 		fmt.Fprintf(os.Stderr, "init: %s\n", err.Error())
 		os.Exit(1)
 	}
+
+	bi, ok := debug.ReadBuildInfo()
+	if !ok {
+		fmt.Fprintln(os.Stderr, "failed to read build info")
+		os.Exit(1)
+	}
+
+	revision := ""
+	time := ""
+	for _, setting := range bi.Settings {
+		switch setting.Key {
+		case "vcs.revision":
+			revision = setting.Value
+		case "vcs.time":
+			time = setting.Value
+		}
+	}
+
+	RootCmd.SetVersionTemplate(fmt.Sprintf("%s (%s)\n", revision, time))
 }
 
 var RootCmd = &cobra.Command{
-	Use:   "jot",
-	Short: "Jot jot",
+	Use:     "jot",
+	Short:   "Jot jot",
+	Version: "devel",
 }
 
 func Execute() error {
