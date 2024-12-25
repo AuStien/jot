@@ -28,7 +28,7 @@ var binderCmd = &cobra.Command{
 				path := []string{b.HomeDir}
 				path = append(path, levels[:len(levels)-1]...)
 				if err := os.MkdirAll(filepath.Join(path...), 0o755); err != nil {
-					fmt.Fprintf(os.Stderr, err.Error())
+					fmt.Fprintf(os.Stderr, "mkdir: %s\n", err.Error())
 					os.Exit(1)
 				}
 			}
